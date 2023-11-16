@@ -1,4 +1,4 @@
-const GuildModel = require("../../models/GuildScehma");
+const GuildModel = require("../../models/GuildSchema");
 
 module.exports = async (guild, client) => {
   const ownerId = guild.ownerId;
