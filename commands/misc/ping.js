@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
   run: async ({ interaction, client }) => {
@@ -7,10 +7,9 @@ module.exports = {
         "This command can only be executed while in guild"
       );
     await interaction.deferReply({ ephemeral: true });
-    return interaction.editReply("Pong");
+    return interaction.editReply("Pongo");
   },
   data: new SlashCommandBuilder()
     .setName("ping")
-    .setDescription("Replies with Pong"),
-  devOnly: true,
+    .setDescription("Replies with Pong."),
 };
