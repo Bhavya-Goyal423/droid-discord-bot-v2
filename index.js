@@ -2,6 +2,7 @@ require("dotenv/config");
 
 const { Client, IntentsBitField } = require("discord.js");
 const { CommandHandler } = require("djs-commander");
+const { default: mongoose } = require("mongoose");
 const path = require("path");
 
 const client = new Client({
@@ -22,5 +23,10 @@ new CommandHandler({
   validationsPath: path.join(__dirname, "validations"),
   testServer: process.env.TEST_SERVER,
 });
+
+(async () => {
+  await mongoose.connect(process.env.DATABASE_URI);
+  console.log("Connected to Database");
+})();
 
 client.login(process.env.TOKEN);

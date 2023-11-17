@@ -51,6 +51,10 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+      interaction.followUp({
+        content: "Internal server error",
+        ephemeral: true,
+      });
     }
   },
   data: new SlashCommandBuilder()
@@ -74,4 +78,6 @@ module.exports = {
           { name: "Yes", value: "true" }
         )
     ),
+  MemberPermissions: [PermissionFlagsBits.KickMembers],
+  BotPermissions: [PermissionFlagsBits.KickMembers],
 };

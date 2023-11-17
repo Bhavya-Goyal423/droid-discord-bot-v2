@@ -1,4 +1,5 @@
 const { PermissionFlagsBits } = require("discord.js");
+const { BotPermissions } = require("../commands/moderation/ban");
 
 module.exports = (interaction, commandObj, _, client) => {
   if (!interaction.inGuild())
@@ -31,7 +32,9 @@ module.exports = (interaction, commandObj, _, client) => {
     // * Checking if bot have enough permissions
 
     if (commandObj.BotPermissions && commandObj.BotPermissions.length > 0) {
+      console.log("Checking bot permission");
       for (const permission of commandObj.BotPermissions) {
+        console.log(bot.permissions.has(permission));
         if (!bot.permissions.has(permission)) {
           botHavePermissions = false;
           interaction.reply({
