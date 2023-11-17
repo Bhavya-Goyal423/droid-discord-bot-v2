@@ -7,17 +7,24 @@ module.exports = {
 
     try {
       const channelId = interaction.getChannel("channel-id")?.id;
+      const guild = await guildModel.findOne({ guildId: interaction.guildId });
+
+      if (guild.levelsEnabled) {
+        return await interaction.followUp({
+          content:
+            "Levels already enabled for you server if you want to change the log channel user /set level logChannel",
+        });
+      }
 
       if (channelId) {
-        await guildModel.findOneAndUpdate(
-          { guildId: interaction.guildId },
-          { levelLogChannelId: channelId, levelsEnabled: true }
-        );
+        guild.levelLogChannelId = channelId;
+        guild.levelsEnabled = true;
+        await guild.save();
+        return interaction.followUp({ content: "Enabled Levels ✅" });
       } else {
-        await guildModel.findOneAndUpdate(
-          { guildId: interaction.guildId },
-          { levelsEnabled: true }
-        );
+        guild.levelsEnabled = true;
+        await guild.save();
+        return interaction.followUp({ content: "Enabled Levels ✅" });
       }
     } catch (error) {
       console.log(error);
@@ -29,7 +36,7 @@ module.exports = {
   },
   data: new SlashCommandBuilder()
     .setName("enable")
-    .setDescription("enable the levels for the server")
+    .setDescription("enable the level system for the server")
     .addChannelOption((option) =>
       option.setName("channel-id").setDescription("channel to log the levels")
     ),

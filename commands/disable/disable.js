@@ -23,6 +23,15 @@ module.exports = {
       await guild.save();
       return interaction.followUp({ content: "Disabled Auto Role ✅" });
     }
+
+    // * ------------- Disable autorole ---------------------------
+
+    if (subCommand === "levels") {
+      guild.levelsEnabled = false;
+      guild.levelLogChannelId = null;
+      await guild.save();
+      return interaction.followUp({ content: "Levels disabled ✅" });
+    }
   },
   data: new SlashCommandBuilder()
     .setName("disable")
@@ -36,6 +45,11 @@ module.exports = {
     )
     .addSubcommand((subCommand) =>
       subCommand.setName("auto_role").setDescription("disables the autorole")
+    )
+    .addSubcommand((subCommand) =>
+      subCommand
+        .setName("levels")
+        .setDescription("disable the level system for the server")
     ),
 
   MemberPermissions: [
