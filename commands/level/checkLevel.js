@@ -1,5 +1,7 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require("discord.js");
 const guildModel = require("../../models/GuildSchema");
+const canvacord = require("canvacord");
+const calculateLevelXp = require("../../utils/calcualteLevelXp");
 
 module.exports = {
   run: async ({ interaction, client }) => {
