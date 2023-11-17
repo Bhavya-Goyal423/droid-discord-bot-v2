@@ -120,6 +120,7 @@ module.exports = {
             .setRequired(true)
         )
     )
+
     .addSubcommandGroup((subCommandGroup) =>
       subCommandGroup
         .setName("welcome")
