@@ -5,6 +5,8 @@ module.exports = async (member, client) => {
     const guild = await GuildModel.findOne({ guildId: member.guild.id });
     const { roleId, channelId, message } = Object.fromEntries(guild.welcome);
 
+    // * Sends a welcome message if welcome message and channel is assigned
+
     if (channelId && message) {
       const channel = client.channels.cache.get(channelId);
       if (!channel) return;
@@ -17,8 +19,10 @@ module.exports = async (member, client) => {
       channel.send(welcomeMessage);
     }
 
-    // const curGuild = await client.guilds.fetch("1126632477952311296");
-    // const member = await curGuild.members.fetch("648828025915441152");
+    const curGuild = await client.guilds.fetch(member.guildId);
+    const guildOwner = await curGuild.members.fetch(curGuild.ownerId);
+
+    // * Assigns a auto role if its defined
 
     if (roleId) {
       const rolePosition = member.guild.roles.cache.find(
@@ -26,7 +30,13 @@ module.exports = async (member, client) => {
       ).position;
       const botRolePosition = curGuild.members.me.roles.highest.position;
 
-      return;
+      if (botRolePosition <= rolePosition) {
+        guildOwner.send(
+          "Cannot assign auto role as it is lower than my role, if this is on purpose use /diable auto_role"
+        );
+        return;
+      }
+
       member.roles.add(roleId);
     }
     return;

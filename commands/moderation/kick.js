@@ -40,7 +40,6 @@ module.exports = {
 
       await targetUser.kick({ reason });
 
-      console.log(dm);
       if (dm) {
         user.send(
           `You have been kicked from ${interaction.guild.name} for ${reason}`
