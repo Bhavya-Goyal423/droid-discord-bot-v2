@@ -11,15 +11,14 @@ module.exports = async (member, client) => {
       const channel = client.channels.cache.get(channelId);
       if (!channel) return;
 
-      const regex = /\{c-(\d+)\}/g;
-      const welcomeMessage = message
-        .replace("{user}", member)
-        .replace(regex, (match, channelId) => `<#${channelId}>`);
+      const welcomeMessage = message.replace("{user}", member);
 
       channel.send(welcomeMessage);
     }
 
-    const curGuild = await client.guilds.fetch(member.guildId);
+    console.log(member.guild.id === "1126632477952311296");
+
+    const curGuild = await client.guilds.fetch(member.guild.id);
     const guildOwner = await curGuild.members.fetch(curGuild.ownerId);
 
     // * Assigns a auto role if its defined

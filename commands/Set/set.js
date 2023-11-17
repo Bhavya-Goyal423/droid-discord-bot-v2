@@ -5,27 +5,28 @@ module.exports = {
   run: async ({ interaction, client }) => {
     const subCommand = interaction.options.getSubcommand();
     await interaction.deferReply({ ephemeral: true });
+    const curGuild = interaction.guild;
+    const guild = await guildModel.findOne({
+      guildId: interaction.guildId,
+    });
+    const guildWelcome = Object.fromEntries(guild.welcome);
+
+    // * Check if guild present in database
+
+    if (!guild)
+      return await interaction.followUp({
+        content:
+          "Server not present in database, please kick the bot and invite it again.",
+        ephemeral: true,
+      });
 
     try {
-      // ? ----------- SET AUTO ROLE ---------------------
+      // * --------------------- Role Command -----------------------------
       if (subCommand === "auto_role") {
         let rolePresent = false;
         const roleId = interaction.options.getRole("role").id;
-        const curGuild = interaction.guild;
-        const guild = await guildModel.findOne({
-          guildId: interaction.guildId,
-        });
 
-        //  Check if guild present in database
-
-        if (!guild)
-          return await interaction.followUp({
-            content:
-              "Server not present in database, please kick the bot and invite it again.",
-            ephemeral: true,
-          });
-
-        // Check if bot role is above the given role
+        // * Check if bot role is above the given role
 
         const roleToGive = curGuild.roles.cache.find(
           (role) => role.id === roleId
@@ -38,20 +39,65 @@ module.exports = {
             "Role not set\nReason: Specified role has same/higher position than my role"
           );
 
-        // Setting role to database
+        // * Setting role to database
 
-        const guildWelcome = Object.fromEntries(guild.welcome);
         if (guildWelcome.roleId) rolePresent = true;
         guild.welcome = { ...guildWelcome, roleId };
         await guild.save();
 
         if (!rolePresent) {
           await interaction.followUp({
-            content: "Autorole Enabled",
+            content: "Autorole Enabled ✅",
           });
         } else {
           await interaction.followUp({
-            content: "Autorole Updated",
+            content: "Autorole Updated ✅",
+          });
+        }
+      }
+
+      // * --------------------- Channel Command -----------------------------
+
+      if (subCommand === "channel") {
+        const channelId = interaction.options.getChannel("channel-id").id;
+        let isChannelPresent = false;
+
+        // * Setting channel to database
+
+        if (guildWelcome.channelId) isChannelPresent = true;
+        guild.welcome = { ...guildWelcome, channelId };
+        await guild.save();
+
+        if (!isChannelPresent) {
+          await interaction.followUp({
+            content: "Channel Set ✅",
+          });
+        } else {
+          await interaction.followUp({
+            content: "Channel Updated ✅",
+          });
+        }
+      }
+
+      // * --------------------- Message Command -----------------------------
+
+      if (subCommand === "message") {
+        const message = interaction.options.getString("message");
+        let isMessagePresent = false;
+
+        // * Setting message to database
+
+        if (guildWelcome.message) isMessagePresent = true;
+        guild.welcome = { ...guildWelcome, message };
+        await guild.save();
+
+        if (!isMessagePresent) {
+          await interaction.followUp({
+            content: "Message Set ✅",
+          });
+        } else {
+          await interaction.followUp({
+            content: "Message Updated ✅",
           });
         }
       }
@@ -73,8 +119,41 @@ module.exports = {
             .setDescription("role you want give")
             .setRequired(true)
         )
+    )
+    .addSubcommandGroup((subCommandGroup) =>
+      subCommandGroup
+        .setName("welcome")
+        .setDescription("set welcome data")
+        .addSubcommand((subCommand) =>
+          subCommand
+            .setName("channel")
+            .setDescription("channel to welcome user")
+            .addChannelOption((option) =>
+              option
+                .setName("channel-id")
+                .setDescription("welcome user channel")
+                .setRequired(true)
+            )
+        )
+        .addSubcommand((subCommand) =>
+          subCommand
+            .setName("message")
+            .setDescription("message sent on user welcome")
+            .addStringOption((option) =>
+              option
+                .setName("message")
+                .setDescription("message sent whenever a user joins server")
+                .setRequired(true)
+            )
+        )
     ),
 
-  //   MemberPermissions: [PermissionFlagsBits.KickMembers],
-  //   BotPermissions: [PermissionFlagsBits.KickMembers],
+  MemberPermissions: [
+    PermissionFlagsBits.ManageChannels,
+    PermissionFlagsBits.ManageRoles,
+  ],
+  BotPermissions: [
+    PermissionFlagsBits.ManageChannels,
+    PermissionFlagsBits.ManageRoles,
+  ],
 };
