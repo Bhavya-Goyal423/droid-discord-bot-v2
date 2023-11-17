@@ -101,6 +101,33 @@ module.exports = {
           });
         }
       }
+      // * --------------------- Level Log Channel -----------------------------
+      if (subCommand === "log_channel") {
+        const channelId = interaction.options.getChannel("log_channel").id;
+        let isLogChannel = false;
+
+        if (guild.levelLogChannelId) isLogChannel = true;
+
+        guild.levelLogChannelId = channelId;
+        await guild.save();
+        if (isLogChannel)
+          return await interaction.followUp({
+            content: "Log channel updated ✅",
+          });
+        return await interaction.followUp({ content: "Log channel set ✅" });
+      }
+      // * --------------------- Set Level -----------------------------
+      if (subCommand === "user") {
+        const userId = interaction.options.getUser("user").id;
+        const level = interaction.options.getNumber("level");
+        await levelModel.findOneAndUpdate(
+          {
+            guildId: interaction.guildId,
+            userId,
+          },
+          { level }
+        );
+      }
     } catch (error) {
       console.log(error);
       await interaction.followUp({ content: "Internal server error" });
@@ -144,6 +171,39 @@ module.exports = {
               option
                 .setName("message")
                 .setDescription("message sent whenever a user joins server")
+                .setRequired(true)
+            )
+        )
+    )
+    .addSubcommandGroup((subCommandGroup) =>
+      subCommandGroup
+        .setName("level")
+        .setDescription("sets the user level / log channel")
+        .addSubcommand((subCommand) =>
+          subCommand
+            .setName("log_channel")
+            .setDescription("set the log channel for user")
+            .addChannelOption((option) =>
+              option
+                .setName("log_channel")
+                .setDescription("channel you want to log levels in")
+                .setRequired(true)
+            )
+        )
+        .addSubcommand((subCommand) =>
+          subCommand
+            .setName("user")
+            .setDescription("set the level for a user")
+            .addUserOption((option) =>
+              option
+                .setName("user")
+                .setDescription("the user you want to set level of")
+                .setRequired(true)
+            )
+            .addNumberOption((option) =>
+              option
+                .setName("level")
+                .setDescription("the level you want to give to the user")
                 .setRequired(true)
             )
         )
