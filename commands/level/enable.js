@@ -40,6 +40,6 @@ module.exports = {
     .addChannelOption((option) =>
       option.setName("channel-id").setDescription("channel to log the levels")
     ),
-  MemberPermissions: [PermissionFlagsBits.KickMembers],
-  BotPermissions: [PermissionFlagsBits.KickMembers],
+  MemberPermissions: [PermissionFlagsBits.ManageGuild],
+  BotPermissions: [PermissionFlagsBits.ManageGuild],
 };

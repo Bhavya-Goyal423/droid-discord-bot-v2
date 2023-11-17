@@ -152,9 +152,11 @@ module.exports = {
   MemberPermissions: [
     PermissionFlagsBits.ManageChannels,
     PermissionFlagsBits.ManageRoles,
+    PermissionFlagsBits.ManageGuild,
   ],
   BotPermissions: [
     PermissionFlagsBits.ManageChannels,
     PermissionFlagsBits.ManageRoles,
+    PermissionFlagsBits.ManageGuild,
   ],
 };
