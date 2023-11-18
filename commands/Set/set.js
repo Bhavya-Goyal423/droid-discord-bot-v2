@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const guildModel = require("../../models/GuildSchema");
+const levelModel = require("../../models/LevelSchema");
 
 module.exports = {
   run: async ({ interaction, client }) => {
@@ -118,15 +119,31 @@ module.exports = {
       }
       // * --------------------- Set Level -----------------------------
       if (subCommand === "user") {
-        const userId = interaction.options.getUser("user").id;
+        const user = interaction.options.getUser("user");
+        const userId = user.id;
         const level = interaction.options.getNumber("level");
-        await levelModel.findOneAndUpdate(
-          {
-            guildId: interaction.guildId,
+        const userLevel = await levelModel.findOne({
+          guildId: interaction.guildId,
+          userId,
+        });
+        if (!userLevel) {
+          const newLevel = await levelModel.create({
             userId,
-          },
-          { level }
-        );
+            username: user.username,
+            guildName: interaction.guild.name,
+            xp: 0,
+            level,
+            guildId: interaction.guildId,
+          });
+          guild.levels.push(newLevel._id);
+          await guild.save();
+        } else {
+          userLevel.level = level;
+          await userLevel.save();
+        }
+        await interaction.followUp({
+          content: `Level for ${user.globalName} user set ✅`,
+        });
       }
     } catch (error) {
       console.log(error);

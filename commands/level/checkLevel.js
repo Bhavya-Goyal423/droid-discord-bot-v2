@@ -31,15 +31,25 @@ module.exports = {
       });
 
       let curRank = allLevels.findIndex((obj) => obj.userId === userId) + 1;
+
+      const targetUser = await interaction.guild.members.fetch(userId);
+
       const rank = new canvacord.Rank()
         .setAvatar(targetUser.user.displayAvatarURL({ size: 128 }))
         .setRank(curRank)
-        .setLevel(level.level)
-        .setCurrentXP(level.xp)
-        .setRequiredXP(calculateLevelXp(level.level))
-        .setStatus(targetUser.presence.status)
+        .setLevel(userLevel.level)
+        .setCurrentXP(userLevel.xp)
+        .setRequiredXP(calculateLevelXp(userLevel.level))
+        .setStatus(
+          targetUser?.presence?.status ? targetUser.presence.status : "offline"
+        )
         .setProgressBar("#FFC300", "COLOR")
-        .setUsername(targetUser.user.username);
+        .setUsername(targetUser.user.username)
+        .setBackground(
+          "IMAGE",
+          "https://images.unsplash.com/photo-1513297887119-d46091b24bfa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        )
+        .setOverlay("#00222222");
 
       const data = await rank.build();
       const attachment = new AttachmentBuilder(data);
@@ -55,7 +65,7 @@ module.exports = {
   },
   data: new SlashCommandBuilder()
     .setName("level")
-    .setDescription("enable the levels for the server")
+    .setDescription("check the level for a user")
     .addUserOption((option) =>
       option.setName("user").setDescription("user you want to check level of")
     ),

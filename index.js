@@ -4,6 +4,8 @@ const { Client, IntentsBitField } = require("discord.js");
 const { CommandHandler } = require("djs-commander");
 const { default: mongoose } = require("mongoose");
 const path = require("path");
+const updateFieldInScehma = require("./utils/updateFieldsInSchema");
+const guildModel = require("./models/GuildSchema");
 
 const client = new Client({
   intents: [
@@ -21,7 +23,7 @@ new CommandHandler({
   commandsPath: path.join(__dirname, "commands"),
   eventsPath: path.join(__dirname, "events"),
   validationsPath: path.join(__dirname, "validations"),
-  testServer: process.env.TEST_SERVER,
+  // testServer: process.env.TEST_SERVER,
 });
 
 (async () => {
