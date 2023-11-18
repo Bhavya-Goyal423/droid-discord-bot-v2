@@ -119,7 +119,12 @@ module.exports = {
       }
       // * --------------------- Set Level -----------------------------
       if (subCommand === "user") {
+        if (!guild.levelsEnabled)
+          return await interaction.followUp({
+            content: "Levels not enabled for your server, use /enable levels",
+          });
         const user = interaction.options.getUser("user");
+        console.log(user);
         const userId = user.id;
         const level = interaction.options.getNumber("level");
         const userLevel = await levelModel.findOne({
@@ -142,7 +147,9 @@ module.exports = {
           await userLevel.save();
         }
         await interaction.followUp({
-          content: `Level for ${user.globalName} user set ✅`,
+          content: `Level for ${
+            user.globalName ? user.globalName : user.username
+          } set ✅`,
         });
       }
     } catch (error) {

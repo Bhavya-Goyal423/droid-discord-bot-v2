@@ -6,7 +6,7 @@ module.exports = {
     await interaction.deferReply({ ephemeral: true });
 
     try {
-      const channelId = interaction.getChannel("channel-id")?.id;
+      const channelId = interaction.options.getChannel("channel-id")?.id;
       const guild = await guildModel.findOne({ guildId: interaction.guildId });
 
       if (guild.levelsEnabled) {
@@ -37,9 +37,17 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("enable")
     .setDescription("enable the level system for the server")
-    .addChannelOption((option) =>
-      option.setName("channel-id").setDescription("channel to log the levels")
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("levels")
+        .setDescription("enable the level system for the server")
+        .addChannelOption((option) =>
+          option
+            .setName("channel-id")
+            .setDescription("channel to log the levels")
+        )
     ),
+
   MemberPermissions: [PermissionFlagsBits.ManageGuild],
   BotPermissions: [PermissionFlagsBits.ManageGuild],
 };

@@ -14,6 +14,11 @@ module.exports = {
         .findOne({ guildId: interaction.guildId })
         .populate("levels");
 
+      if (!guild.levelsEnabled)
+        return await interaction.followUp({
+          content: "Levels not enabled for your server, use /enable levels",
+        });
+
       const allLevels = guild.levels;
 
       const userLevel = allLevels.find((level) => level.userId === userId);
@@ -67,6 +72,9 @@ module.exports = {
     .setName("level")
     .setDescription("check the level for a user")
     .addUserOption((option) =>
-      option.setName("user").setDescription("user you want to check level of")
+      option
+        .setName("user")
+        .setDescription("user you want to check level of")
+        .setRequired(true)
     ),
 };

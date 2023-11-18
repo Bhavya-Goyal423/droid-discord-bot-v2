@@ -16,8 +16,6 @@ module.exports = async (member, client) => {
       channel.send(welcomeMessage);
     }
 
-    console.log(member.guild.id === "1126632477952311296");
-
     const curGuild = await client.guilds.fetch(member.guild.id);
     const guildOwner = await curGuild.members.fetch(curGuild.ownerId);
 
