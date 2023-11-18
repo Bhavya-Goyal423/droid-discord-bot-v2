@@ -1,7 +1,7 @@
 const { PermissionFlagsBits } = require("discord.js");
 const { BotPermissions } = require("../commands/moderation/ban");
 
-module.exports = (interaction, commandObj, _, client) => {
+module.exports = ({ interaction, commandObj, _, client }) => {
   if (!interaction.inGuild())
     return interaction.reply("The command can only be run in guilds");
   const member = interaction.guild.members.cache.get(interaction.member.id);

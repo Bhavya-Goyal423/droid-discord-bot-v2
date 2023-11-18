@@ -1,4 +1,4 @@
-module.exports = (interaction, commandObj, _, client) => {
+module.exports = ({ interaction, commandObj, _, client }) => {
   if (!interaction.inGuild())
     return interaction.reply("The command can only be run in guilds");
   if (commandObj.devOnly) {

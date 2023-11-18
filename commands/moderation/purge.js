@@ -15,16 +15,26 @@ module.exports = {
 
     try {
       const number = interaction.options.getInteger("count");
-      console.log(number);
       const deletedMsg = await interaction.channel.bulkDelete(number);
-      console.log(deletedMsg);
       const embed = new EmbedBuilder()
         .setColor("Blurple")
         .setDescription(`Deleted messages ✅`);
       interaction.followUp({ embeds: [embed] });
     } catch (error) {
-      console.log(error.message);
       console.log(error);
+      if (error.message === "Missing Permissions") {
+        return interaction.followUp({
+          content: "I don't have permission to do that action in this channel",
+        });
+      } else if (
+        error.message ===
+        "You can only bulk delete messages that are under 14 days old."
+      ) {
+        return interaction.followUp({
+          content:
+            "You can only bulk delete messages that are under 14 days old.",
+        });
+      }
       interaction.followUp({
         content: "Internal server error",
         ephemeral: true,
@@ -37,12 +47,11 @@ module.exports = {
     .addIntegerOption((option) =>
       option
         .setName("count")
-        .setDescription("number of messages to delete.Limit 1000")
+        .setDescription("Number of messages to delete.Limit 100")
         .setMinValue(1)
         .setMaxValue(100)
         .setRequired(true)
     ),
   MemberPermissions: [PermissionFlagsBits.ManageMessages],
   BotPermissions: [PermissionFlagsBits.ManageMessages],
-  deleted: true,
 };

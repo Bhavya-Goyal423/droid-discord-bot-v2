@@ -4,6 +4,7 @@ const { Client, IntentsBitField } = require("discord.js");
 const { CommandHandler } = require("djs-commander");
 const { default: mongoose } = require("mongoose");
 const path = require("path");
+const { CommandKit } = require("commandkit");
 const updateFieldInScehma = require("./utils/updateFieldsInSchema");
 const guildModel = require("./models/GuildSchema");
 
@@ -18,11 +19,19 @@ const client = new Client({
   ],
 });
 
-new CommandHandler({
+// new CommandHandler({
+//   client,
+//   commandsPath: path.join(__dirname, "commands"),
+//   eventsPath: path.join(__dirname, "events"),
+//   validationsPath: path.join(__dirname, "validations"),
+// });
+
+new CommandKit({
   client,
   commandsPath: path.join(__dirname, "commands"),
   eventsPath: path.join(__dirname, "events"),
   validationsPath: path.join(__dirname, "validations"),
+  bulkRegister: true,
 });
 
 (async () => {
