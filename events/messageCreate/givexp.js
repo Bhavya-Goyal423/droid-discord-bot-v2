@@ -66,7 +66,7 @@ module.exports = async (message, client) => {
       cooldown.add(message.author.id + message.guild.id);
       setTimeout(() => {
         cooldown.delete(message.author.id + message.guild.id);
-      }, 10);
+      }, 30000);
     } else {
       const newLevel = new levelModel({
         userId: message.author.id,
