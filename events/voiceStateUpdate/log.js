@@ -1,17 +1,64 @@
-const { EmbedBuilder } = require("discord.js");
+const moment = require("moment");
 
-module.exports = (oldState, newState, client) => {
-  //   console.log(oldState.channel?.name);
-  //   console.log(newState.channel?.name);
-  if (oldState.channel?.name !== newState.channel?.name) {
-    if (oldState.channel?.name === undefined && newState.channel?.name) {
-      console.log(`User connected to ${newState.channel?.name}`);
-    } else if (oldState.channel?.name && newState.channel?.name === undefined) {
-      console.log(`user disconnted from ${oldState.channel?.name}`);
-    } else if (oldState.channel?.name && newState.channel?.name) {
-      console.log(
-        `User switched from ${oldState.channel?.name} to ${newState.channel?.name}`
-      );
+module.exports = async (oldState, newState, client) => {
+  try {
+    const oldVc = oldState.channel?.name;
+    const newVc = newState.channel?.name;
+
+    const user = newState.guild.members.cache.get(oldState.id);
+    const logChannel = newState.guild.channels.cache.get("1173686145012469762");
+
+    let messageString = "";
+
+    if (oldVc !== newVc) {
+      if (oldVc === undefined && newVc) {
+        const embed = {
+          color: 0x9ade7b,
+          author: {
+            name: user.user.username,
+            icon_url: user.user.displayAvatarURL({ size: 128 }),
+          },
+          description: `**${user} joined voice channel \`${newVc}\`**`,
+          footer: {
+            text: `${user.guild.name} • ${moment(new Date()).format(
+              "YYYY/MM/DD h:mm A"
+            )}`,
+          },
+        };
+        logChannel.send({ embeds: [embed] });
+      } else if (oldVc && newVc === undefined) {
+        const embed = {
+          color: 0xd80032,
+          author: {
+            name: user.user.username,
+            icon_url: user.user.displayAvatarURL({ size: 128 }),
+          },
+          description: `**${user} left voice channel \`${oldVc}\`**`,
+          footer: {
+            text: `${user.guild.name} • ${moment(new Date()).format(
+              "YYYY/MM/DD h:mm A"
+            )}`,
+          },
+        };
+        logChannel.send({ embeds: [embed] });
+      } else if (oldVc && newVc) {
+        const embed = {
+          color: 0xffcf96,
+          author: {
+            name: user.user.username,
+            icon_url: user.user.displayAvatarURL({ size: 128 }),
+          },
+          description: `**${user} swtiched voice channel \`${oldVc}\` => \`${newVc}\`**`,
+          footer: {
+            text: `${user.guild.name} • ${moment(new Date()).format(
+              "YYYY/MM/DD h:mm A"
+            )}`,
+          },
+        };
+        logChannel.send({ embeds: [embed] });
+      }
     }
+  } catch (error) {
+    console.log(error);
   }
 };
