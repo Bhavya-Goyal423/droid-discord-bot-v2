@@ -23,7 +23,6 @@ new CommandHandler({
   commandsPath: path.join(__dirname, "commands"),
   eventsPath: path.join(__dirname, "events"),
   validationsPath: path.join(__dirname, "validations"),
-  testServer: process.env.TEST_SERVER,
 });
 
 (async () => {

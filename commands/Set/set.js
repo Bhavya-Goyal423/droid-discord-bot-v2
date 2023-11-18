@@ -124,7 +124,6 @@ module.exports = {
             content: "Levels not enabled for your server, use /enable levels",
           });
         const user = interaction.options.getUser("user");
-        console.log(user);
         const userId = user.id;
         const level = interaction.options.getNumber("level");
         const userLevel = await levelModel.findOne({

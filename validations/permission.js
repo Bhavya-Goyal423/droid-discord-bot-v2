@@ -36,7 +36,7 @@ module.exports = (interaction, commandObj, _, client) => {
         if (!bot.permissions.has(permission)) {
           botHavePermissions = false;
           interaction.reply({
-            content: "I dont have enough permissions xd",
+            content: "I dont have enough permissions",
             ephemeral: true,
           });
           return true;
