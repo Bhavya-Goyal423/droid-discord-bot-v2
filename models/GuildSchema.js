@@ -21,6 +21,7 @@ const guildScehma = new Schema({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Level" }],
     default: [],
   },
+  logChannelId: { type: String, default: "" },
   welcome: {
     type: Map,
     of: String,
