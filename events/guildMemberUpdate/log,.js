@@ -19,7 +19,7 @@ module.exports = async (oldMember, newMember) => {
 
     if (addedRole) {
       const embed = {
-        color: 0xf05941,
+        color: 0x9400ff,
         author: {
           name: user.username,
           icon_url: user.displayAvatarURL({ size: 128 }),
@@ -43,7 +43,7 @@ module.exports = async (oldMember, newMember) => {
       logChannel.send({ embeds: [embed] });
     } else if (removedRole) {
       const embed = {
-        color: 0xf05941,
+        color: 0x9400ff,
         author: {
           name: user.username,
           icon_url: user.displayAvatarURL({ size: 128 }),
