@@ -1,16 +1,20 @@
 const moment = require("moment");
+const guildModel = require("../../models/GuildSchema");
 
 module.exports = async (oldState, newState, client) => {
   try {
+    const guild = await guildModel.findOne({ guildId: newState.guild.id });
+    if (!guild.logChannelId) return;
     const oldVc = oldState.channel?.name;
     const newVc = newState.channel?.name;
+    const oldVcId = oldState.channel?.id;
+    const newVcId = oldState.chaanel?.id;
 
     const user = newState.guild.members.cache.get(oldState.id);
-    const logChannel = newState.guild.channels.cache.get("1173686145012469762");
+    const logChannel = newState.guild.channels.cache.get(guild.logChannelId);
+    if (!logChannel) return;
 
-    let messageString = "";
-
-    if (oldVc !== newVc) {
+    if (oldVc !== newVc || oldVcId !== newVcId) {
       if (oldVc === undefined && newVc) {
         const embed = {
           color: 0x9ade7b,
