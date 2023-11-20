@@ -8,7 +8,7 @@ module.exports = async (oldState, newState, client) => {
     const oldVc = oldState.channel?.name;
     const newVc = newState.channel?.name;
     const oldVcId = oldState.channel?.id;
-    const newVcId = oldState.chaanel?.id;
+    const newVcId = newState.channel?.id;
 
     const user = newState.guild.members.cache.get(oldState.id);
     const logChannel = newState.guild.channels.cache.get(guild.logChannelId);

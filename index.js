@@ -305,7 +305,7 @@ client.distube
         )}`,
       },
     };
-    query.textChannel.send({ embeds: [embed] });
+    queue.textChannel.send({ embeds: [embed] });
   });
 
 (async () => {
