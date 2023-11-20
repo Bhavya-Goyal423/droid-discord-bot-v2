@@ -12,6 +12,10 @@ const { YtDlpPlugin } = require("@distube/yt-dlp");
 const updateFieldInScehma = require("./utils/updateFieldsInSchema");
 const guildModel = require("./models/GuildSchema");
 
+const fs = require("fs");
+const config = require("./config.json");
+const Discord = require("discord.js");
+
 const client = new Client({
   intents: [
     IntentsBitField.Flags.Guilds,
@@ -31,7 +35,7 @@ new CommandKit({
   bulkRegister: true,
 });
 
-client.Distube = new DisTube(client, {
+client.distube = new DisTube(client, {
   leaveOnStop: false,
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
@@ -191,9 +195,58 @@ client.Distube = new DisTube(client, {
   ],
 });
 
-client.Distube.on("playSong", (queue, song) => {
-  queue.textChannel.send("Now Playing " + song.name);
+client.commands = new Discord.Collection();
+client.aliases = new Discord.Collection();
+client.emotes = config.emoji;
+
+fs.readdir("./music/commands/", (err, files) => {
+  if (err) return console.log("Could not find any commands!");
+  const jsFiles = files.filter((f) => f.split(".").pop() === "js");
+  if (jsFiles.length <= 0) return console.log("Could not find any commands!");
+  jsFiles.forEach((file) => {
+    const cmd = require(`./music/commands/${file}`);
+    console.log(`Loaded ${file}`);
+    client.commands.set(cmd.name, cmd);
+    if (cmd.aliases)
+      cmd.aliases.forEach((alias) => client.aliases.set(alias, cmd.name));
+  });
 });
+
+client.distube
+  .on("playSong", (queue, song) =>
+    queue.textChannel.send(
+      `${client.emotes.play} | Playing \`${song.name}\` - \`${song.formattedDuration}\``
+    )
+  )
+  .on("addSong", (queue, song) =>
+    queue.textChannel.send(
+      `${client.emotes.success} | Added ${song.name} - \`${song.formattedDuration}\` to the queue`
+    )
+  )
+  .on("addList", (queue, playlist) =>
+    queue.textChannel.send(
+      `${client.emotes.success} | Added \`${playlist.name}\` playlist (${playlist.songs.length} songs) to queue`
+    )
+  )
+  .on("error", (channel, e) => {
+    if (channel)
+      channel.textChannel.send(
+        `${client.emotes.error} | An error encountered: ${e
+          .toString()
+          .slice(0, 1974)}`
+      );
+    else console.error(e);
+  })
+  .on("empty", (channel) => {
+    console.log(channel);
+    channel.textChannel.send("Voice channel is empty! Leaving the channel...");
+  })
+  .on("searchNoResult", (message, query) =>
+    message.channel.send(
+      `${client.emotes.error} | No result found for \`${query}\`!`
+    )
+  )
+  .on("finish", (queue) => queue.textChannel.send("Finished!"));
 
 (async () => {
   await mongoose.connect(process.env.DATABASE_URI);
