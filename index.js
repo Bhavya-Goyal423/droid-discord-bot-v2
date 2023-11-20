@@ -272,15 +272,41 @@ client.distube
     else console.error(e);
   })
   .on("empty", (channel) => {
-    console.log(channel);
-    channel.textChannel.send("Voice channel is empty! Leaving the channel...");
+    const embed = {
+      color: 0x7752fe,
+      description: `Voice channel is empty! Leaving the channel...`,
+      footer: {
+        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
+          "YYYY/MM/DD h:mm A"
+        )}`,
+      },
+    };
+    channel.textChannel.send({ embeds: [embed] });
   })
-  .on("searchNoResult", (message, query) =>
-    message.channel.send(
-      `${client.emotes.error} | No result found for \`${query}\`!`
-    )
-  )
-  .on("finish", (queue) => queue.textChannel.send("Finished!"));
+  .on("searchNoResult", (message, query) => {
+    const embed = {
+      color: 0x7752fe,
+      description: `${client.emotes.error} | No result found for \`${query}\`!`,
+      footer: {
+        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
+          "YYYY/MM/DD h:mm A"
+        )}`,
+      },
+    };
+    message.channel.send({ embeds: [embed] });
+  })
+  .on("finish", (queue) => {
+    const embed = {
+      color: 0x7752fe,
+      description: `No more songs to play`,
+      footer: {
+        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
+          "YYYY/MM/DD h:mm A"
+        )}`,
+      },
+    };
+    query.textChannel.send({ embeds: [embed] });
+  });
 
 (async () => {
   await mongoose.connect(process.env.DATABASE_URI);
