@@ -1,5 +1,6 @@
 require("dotenv/config");
 
+const moment = require("moment");
 const { Client, IntentsBitField } = require("discord.js");
 const { default: mongoose } = require("mongoose");
 const path = require("path");
@@ -213,16 +214,49 @@ fs.readdir("./music/commands/", (err, files) => {
 });
 
 client.distube
-  .on("playSong", (queue, song) =>
-    queue.textChannel.send(
-      `${client.emotes.play} | Playing \`${song.name}\` - \`${song.formattedDuration}\``
-    )
-  )
-  .on("addSong", (queue, song) =>
-    queue.textChannel.send(
-      `${client.emotes.success} | Added ${song.name} - \`${song.formattedDuration}\` to the queue`
-    )
-  )
+  .on("playSong", (queue, song) => {
+    const embed = {
+      color: 0x7752fe,
+      title: song.name,
+      url: song.url,
+      author: {
+        name: song.user.username,
+        icon_url: song.user.displayAvatarURL({ size: 128 }),
+      },
+      thumbnail: {
+        url: song.thumbnail,
+      },
+      description: `${client.emotes.play} | Playing \`${song.name}\` - \`${song.formattedDuration}\``,
+      footer: {
+        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
+          "YYYY/MM/DD h:mm A"
+        )}`,
+      },
+    };
+    queue.textChannel.send({ embeds: [embed] });
+  })
+  .on("addSong", (queue, song) => {
+    const embed = {
+      color: 0x7752fe,
+      title: song.name,
+      url: song.url,
+      author: {
+        name: song.user.username,
+        icon_url: song.user.displayAvatarURL({ size: 128 }),
+      },
+      thumbnail: {
+        url: song.thumbnail,
+      },
+      description: `${client.emotes.success} | Added \`${song.name}\` - \`${song.formattedDuration}\` to the queue`,
+      footer: {
+        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
+          "YYYY/MM/DD h:mm A"
+        )}`,
+      },
+    };
+
+    queue.textChannel.send({ embeds: [embed] });
+  })
   .on("addList", (queue, playlist) =>
     queue.textChannel.send(
       `${client.emotes.success} | Added \`${playlist.name}\` playlist (${playlist.songs.length} songs) to queue`

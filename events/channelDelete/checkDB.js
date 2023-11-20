@@ -3,8 +3,6 @@ const guildModel = require("../../models/GuildSchema");
 module.exports = async (channel, client) => {
   try {
     const channelId = channel.id;
-    console.log("CHANNEL_ID", channelId);
-    console.log("GUILD_ID", channel.guildId);
     const guild = await guildModel.findOne({ guildId: channel.guildId });
     const guildWelcome = Object.fromEntries(guild.welcome);
     const welcomeChannelId = guildWelcome.channelId;

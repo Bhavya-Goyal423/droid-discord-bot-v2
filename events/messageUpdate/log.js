@@ -1,4 +1,5 @@
 module.exports = async (oldMessage, newMessage, client) => {
+  if (oldMessage.author.bot) return;
   if (oldMessage.content.toLowerCase().startsWith("!")) return;
   try {
     const channelId = newMessage.channelId;
