@@ -1,5 +1,5 @@
 module.exports = async (oldMessage, newMessage, client) => {
-  if (oldMessage.content.toLowerCase().startsWith("!d")) return;
+  if (oldMessage.content.toLowerCase().startsWith("!")) return;
   try {
     const channelId = newMessage.channelId;
     const oldMsg = oldMessage.content;

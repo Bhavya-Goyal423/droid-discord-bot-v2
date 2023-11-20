@@ -36,7 +36,7 @@ client.Distube = new DisTube(client, {
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
-  emptyCooldown: 10,
+  emptyCooldown: 1,
   youtubeCookie: [
     {
       domain: ".youtube.com",
@@ -191,10 +191,9 @@ client.Distube = new DisTube(client, {
   ],
 });
 
-// client.Distube.on("playSong", (queue, song) => {
-//   console.log("Emitted");
-//   queue.message.channel.send("Now Playing " + song.name);
-// });
+client.Distube.on("playSong", (queue, song) => {
+  queue.textChannel.send("Now Playing " + song.name);
+});
 
 (async () => {
   await mongoose.connect(process.env.DATABASE_URI);
