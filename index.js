@@ -10,6 +10,7 @@ const { DeezerPlugin } = require("@distube/deezer");
 const { SpotifyPlugin } = require("@distube/spotify");
 const { SoundCloudPlugin } = require("@distube/soundcloud");
 const { YtDlpPlugin } = require("@distube/yt-dlp");
+const keep_alive = require("./keep_alive.js");
 const updateFieldInScehma = require("./utils/updateFieldsInSchema");
 const guildModel = require("./models/GuildSchema");
 
