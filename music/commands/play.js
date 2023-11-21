@@ -6,17 +6,18 @@ module.exports = {
   inVoiceChannel: true,
   run: async (client, message, args) => {
     try {
-      console.log("here");
       const string = args.join(" ");
       if (!string)
         return message.channel.send(
           `${client.emotes.error} | Please enter a song url or query to search.`
         );
+      console.log("before play execute");
       client.distube.play(message.member.voice.channel, string, {
         member: message.member,
         textChannel: message.channel,
         message,
       });
+      console.log("after play execute");
     } catch (error) {
       console.log("error thrown from here");
       console.log(error);
