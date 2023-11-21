@@ -264,13 +264,14 @@ client.distube
     )
   )
   .on("error", (channel, e) => {
-    if (channel)
-      channel.textChannel.send(
-        `${client.emotes.error} | An error encountered: ${e
-          .toString()
-          .slice(0, 1974)}`
-      );
-    else console.error(e);
+    // if (channel)
+    //   channel.textChannel.send(
+    //     `${client.emotes.error} | An error encountered: ${e
+    //       .toString()
+    //       .slice(0, 1974)}`
+    //   );
+    // else
+    console.error(e);
   })
   .on("empty", (channel) => {
     const embed = {

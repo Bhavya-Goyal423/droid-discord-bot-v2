@@ -13,6 +13,7 @@ module.exports = async (message, client) => {
   const prefix = config.prefix;
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  console.log(args);
   const command = args.shift().toLowerCase();
   const cmd =
     client.commands.get(command) ||
