@@ -6,6 +6,7 @@ module.exports = {
   inVoiceChannel: true,
   run: async (client, message, args) => {
     try {
+      console.log("here");
       const string = args.join(" ");
       if (!string)
         return message.channel.send(
@@ -17,6 +18,7 @@ module.exports = {
         message,
       });
     } catch (error) {
+      console.log("error thrown from here");
       console.log(error);
     }
   },
