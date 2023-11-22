@@ -1,6 +1,9 @@
 require("dotenv/config");
 
-const moment = require("moment");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const moment = require("moment-timezone");
 const { Client, IntentsBitField } = require("discord.js");
 const { default: mongoose } = require("mongoose");
 const path = require("path");
@@ -229,9 +232,9 @@ client.distube
       },
       description: `${client.emotes.play} | Playing \`${song.name}\` - \`${song.formattedDuration}\``,
       footer: {
-        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
-          "YYYY/MM/DD h:mm A"
-        )}`,
+        text: `${queue.textChannel.guild.name} • ${moment(new Date())
+          .tz("Asia/Calcutta")
+          .format("YYYY/MM/DD h:mm A")}`,
       },
     };
     queue.textChannel.send({ embeds: [embed] });
@@ -250,9 +253,9 @@ client.distube
       },
       description: `${client.emotes.success} | Added \`${song.name}\` - \`${song.formattedDuration}\` to the queue`,
       footer: {
-        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
-          "YYYY/MM/DD h:mm A"
-        )}`,
+        text: `${queue.textChannel.guild.name} • ${moment(new Date())
+          .tz("Asia/Calcutta")
+          .format("YYYY/MM/DD h:mm A")}`,
       },
     };
 
@@ -278,9 +281,9 @@ client.distube
       color: 0x7752fe,
       description: `Voice channel is empty! Leaving the channel...`,
       footer: {
-        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
-          "YYYY/MM/DD h:mm A"
-        )}`,
+        text: `${queue.textChannel.guild.name} • ${moment(new Date())
+          .tz("Asia/Calcutta")
+          .format("YYYY/MM/DD h:mm A")}`,
       },
     };
     channel.textChannel.send({ embeds: [embed] });
@@ -290,9 +293,9 @@ client.distube
       color: 0x7752fe,
       description: `${client.emotes.error} | No result found for \`${query}\`!`,
       footer: {
-        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
-          "YYYY/MM/DD h:mm A"
-        )}`,
+        text: `${queue.textChannel.guild.name} • ${moment(new Date())
+          .tz("Asia/Calcutta")
+          .format("YYYY/MM/DD h:mm A")}`,
       },
     };
     message.channel.send({ embeds: [embed] });
@@ -302,9 +305,9 @@ client.distube
       color: 0x7752fe,
       description: `No more songs to play`,
       footer: {
-        text: `${queue.textChannel.guild.name} • ${moment(new Date()).format(
-          "YYYY/MM/DD h:mm A"
-        )}`,
+        text: `${queue.textChannel.guild.name} • ${moment(new Date())
+          .tz("Asia/Calcutta")
+          .format("YYYY/MM/DD h:mm A")}`,
       },
     };
     queue.textChannel.send({ embeds: [embed] });
