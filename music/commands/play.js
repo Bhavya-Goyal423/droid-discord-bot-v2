@@ -6,15 +6,16 @@ module.exports = {
   inVoiceChannel: true,
   run: async (client, message, args) => {
     try {
-      const string = args.join(" ");
-      if (!string)
+      const query = args.join(" ");
+      console.log(query, typeof query);
+      if (!query)
         return message.channel.send(
           `${client.emotes.error} | Please enter a song url or query to search.`
         );
       console.log("before play execute");
       console.log("member channel");
       console.log(message.member.voice.channel);
-      client.distube.play(message.member.voice.channel, string, {
+      client.distube.play(message.member.voice.channel, query, {
         member: message.member,
         textChannel: message.channel,
         message,
