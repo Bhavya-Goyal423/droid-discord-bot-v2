@@ -15,7 +15,7 @@ module.exports = {
       console.log("before play execute");
       console.log("member channel");
       console.log(message.member.voice.channel);
-      client.distube.play(message.member.voice.channel, query, {
+      client.distube.play(message.member.voice.channel, "tu tu hai vahi", {
         member: message.member,
         textChannel: message.channel,
         message,
