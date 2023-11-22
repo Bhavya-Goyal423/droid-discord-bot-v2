@@ -12,6 +12,7 @@ module.exports = {
           `${client.emotes.error} | Please enter a song url or query to search.`
         );
       console.log("before play execute");
+      console.log(message.member.voice.channel);
       client.distube.play(message.member.voice.channel, string, {
         member: message.member,
         textChannel: message.channel,
