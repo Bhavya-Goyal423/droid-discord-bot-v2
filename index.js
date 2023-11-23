@@ -275,6 +275,7 @@ client.distube
     //       .slice(0, 1974)}`
     //   );
     // else
+    console.log("Error From Here");
     console.error(e);
   })
   .on("empty", (channel) => {

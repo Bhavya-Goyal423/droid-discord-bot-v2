@@ -12,7 +12,6 @@ module.exports = {
         return message.channel.send(
           `${client.emotes.error} | Please enter a song url or query to search.`
         );
-      console.log("before play execute");
       client.distube.play(message.member.voice.channel, "tu tu hai vahi", {
         member: message.member,
         textChannel: message.channel,
