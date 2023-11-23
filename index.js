@@ -219,6 +219,7 @@ fs.readdir("./music/commands/", (err, files) => {
 
 client.distube
   .on("playSong", (queue, song) => {
+    console.log("here");
     const embed = {
       color: 0x7752fe,
       title: song.name,
